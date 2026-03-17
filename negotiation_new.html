@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Negotiation Hub</title>
+    <link rel="stylesheet" href="global.css">
+    <link rel="stylesheet" href="negotiation_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+    <div class="app-container">
+        <header>
+            <nav class="nav-tabs">
+                <a href="index.html" class="nav-btn">0. Бартер</a>
+                <a href="hour_calc.html" class="nav-btn">1. Расходы</a>
+                <a href="project_calc.html" class="nav-btn">2. Почасовка</a>
+                <a href="negotiation_new.html" class="nav-btn active">3. Стратегия</a>
+            </nav>
+            <h1>Штурвал переговоров</h1>
+            <p>Стратегический калькулятор и психология цен.</p>
+        </header>
+
+        <div class="negotiation-grid">
+            <div class="main-content">
+                <!-- Criterion 01: Value/Scale -->
+                <section class="glass p-8 mb-8">
+                    <div class="section-header"><i class="fa-solid fa-car-side"></i>
+                        <h3>КРИТЕРИЙ 01: ЦЕННОСТЬ (КЛИЕНТ)</h3>
+                    </div>
+                    <div class="scale-cards">
+                        <div class="scale-card">
+                            <i class="fa-solid fa-car"></i>
+                            <h4>KIA / Ford</h4>
+                            <p>Малый локальный бизнес. Низкий риск, малые охваты. Цена за работу, а не за имя.</p>
+                        </div>
+                        <div class="scale-card">
+                            <i class="fa-solid fa-car-rear"></i>
+                            <h4>Mercedes / Audi</h4>
+                            <p>Средний федеральный бизнес. Высокая планка качества, средние риски и бюджеты.</p>
+                        </div>
+                        <div class="scale-card">
+                            <i class="fa-solid fa-gem"></i>
+                            <h4>Bentley / RR</h4>
+                            <p>Глобальные бренды. Огромная ответственность. Цена за результат и имидж (Value Pricing).
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Criterion 02: Market Prices -->
+                <section class="glass p-8 mb-8">
+                    <div class="section-header"><i class="fa-solid fa-chart-line"></i>
+                        <h3>КРИТЕРИЙ 02: ЦЕНЫ РЫНКА</h3>
+                    </div>
+                    <table class="market-table">
+                        <thead>
+                            <tr>
+                                <th class="text-left py-2 uppercase text-xs text-secondary">Источник</th>
+                                <th class="text-left py-2 uppercase text-xs text-secondary">Цена (₽)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" class="glass-input w-full" value="Топ-агентство"></td>
+                                <td><input type="number" class="glass-input w-full m-price" placeholder="300000"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="glass-input w-full" value="Фриланс средний"></td>
+                                <td><input type="number" class="glass-input w-full m-price" placeholder="100000"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="glass-input w-full" value="Начинающий"></td>
+                                <td><input type="number" class="glass-input w-full m-price" placeholder="30000"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="flex justify-between items-center mt-6 p-4 rounded-xl bg-white/5">
+                        <span class="text-white/60">Средний рынок:</span>
+                        <strong class="text-3xl text-primary"><span id="avgMarket">0</span> ₽</strong>
+                    </div>
+                </section>
+
+                <!-- Strategy Choice -->
+                <section class="glass p-8 mb-8">
+                    <div class="section-header"><i class="fa-solid fa-chess"></i>
+                        <h3>КРИТЕРИЙ 03-04: СТРАТЕГИЧЕСКИЙ ВЫБОР</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                        <div>
+                            <label class="text-xs text-secondary uppercase block mb-3">Ваши издержки (Burn)</label>
+                            <input type="number" id="s-burn" class="glass-input w-full text-xl" placeholder="20000"
+                                oninput="updateRec()">
+                        </div>
+                        <div>
+                            <label class="text-xs text-secondary uppercase block mb-3">Рыночная цена</label>
+                            <input type="number" id="s-market" class="glass-input w-full text-xl" placeholder="50000"
+                                oninput="updateRec()">
+                        </div>
+                        <div>
+                            <label class="text-xs text-secondary uppercase block mb-3">Бюджет клиента</label>
+                            <input type="number" id="s-budget" class="glass-input w-full text-xl" placeholder="45000"
+                                oninput="updateRec()">
+                        </div>
+                    </div>
+
+                    <div class="scenarios-grid">
+                        <button type="button" class="scenario-btn" onclick="selectScenario(1, this)"
+                            data-tip="Вы на мели. Нужны любые деньги, чтобы выжить. Приоритет: победа в тендере ценой.">
+                            <i class="fa-solid fa-person-running"></i><span>Нужна работа</span>
+                        </button>
+                        <button type="button" class="scenario-btn" onclick="selectScenario(2, this)"
+                            data-tip="У вас достаточно заказов. Возьмёте этот только за полную стоимость бюджета.">
+                            <i class="fa-solid fa-check-double"></i><span>Хорошая цена</span>
+                        </button>
+                        <button type="button" class="scenario-btn" onclick="selectScenario(3, this)"
+                            data-tip="У вас перегруз. Либо клиент платит за переработки, либо вы отдыхаете.">
+                            <i class="fa-solid fa-hourglass-half"></i><span>В завале</span>
+                        </button>
+                        <button type="button" class="scenario-btn" onclick="selectScenario(4, this)"
+                            data-tip="Клиент-вампир. Добавляем налог на риск и стресс за сложные правки.">
+                            <i class="fa-solid fa-shield-halved"></i><span>Сложный клиент</span>
+                        </button>
+                        <button type="button" class="scenario-btn" onclick="selectScenario(5, this)"
+                            data-tip="Вы мастер в этой нише. Продаём не часы, а результат и окупаемость.">
+                            <i class="fa-solid fa-star"></i><span>Огромный опыт</span>
+                        </button>
+                        <button type="button" class="scenario-btn" onclick="selectScenario(6, this)"
+                            data-tip="Заходим в новую индустрию. Скидка ради портфолио и лояльности клиента.">
+                            <i class="fa-solid fa-rocket"></i><span>Экспансия</span>
+                        </button>
+                        <button type="button" class="scenario-btn" onclick="selectScenario(7, this)"
+                            data-tip="Конкурентная битва. Оставляем заказчику 'сдачу' от его лимита, чтобы выиграть.">
+                            <i class="fa-solid fa-gavel"></i><span>Тендер</span>
+                        </button>
+                        <button type="button" class="scenario-btn" onclick="selectScenario(8, this)"
+                            data-tip="Бюджет клиента ниже рыночного. Сокращаем объём работ или уходим.">
+                            <i class="fa-solid fa-ban"></i><span>Лимит клиента</span>
+                        </button>
+                        <button type="button" class="scenario-btn" onclick="selectScenario(9, this)"
+                            data-tip="Бюджет клиента выше рынка. Забираем маржу, оставаясь в рамках честности.">
+                            <i class="fa-solid fa-crown"></i><span>Золотая жила</span>
+                        </button>
+                        <button type="button" class="scenario-btn" onclick="selectScenario(10, this)"
+                            data-tip="Работаем строго по себестоимости, чтобы исправить ошибки или сохранить друга.">
+                            <i class="fa-solid fa-handshake"></i><span>Сохранить мир</span>
+                        </button>
+                        <button type="button" class="scenario-btn" onclick="selectScenario(11, this)"
+                            data-tip="Ваши затраты выше рынка. Проблема в процессах, а не в клиенте.">
+                            <i class="fa-solid fa-chart-bar"></i><span>База выше...</span>
+                        </button>
+                        <button type="button" class="scenario-btn" onclick="selectScenario(12, this)"
+                            data-tip="Цена за бренд. Цифры не имеют значения, работает ваша харизма.">
+                            <i class="fa-solid fa-fire"></i><span>Суперзвезда</span>
+                        </button>
+                    </div>
+
+                    <div id="strategyRec" class="rec-box">
+                        <h4 class="text-primary uppercase text-xs font-bold mb-3">Рекомендация:</h4>
+                        <div id="recPrice" class="text-6xl font-bold mb-6 text-white text-center">0 ₽</div>
+                        <p id="recText" class="text-white/70 text-lg leading-relaxed"></p>
+                    </div>
+                </section>
+
+                <!-- NEW: Pricing Strategy Guide -->
+                <section class="glass p-8">
+                    <div class="section-header"><i class="fa-solid fa-comments"></i>
+                        <h3>КАК УЗНАТЬ БЮДЖЕТ (ТЕХНИКИ)</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="strat-guide-list">
+                            <div class="strat-guide-item">
+                                <b>1. Техника "Диапазон-вилка"</b>
+                                "Подобные проекты обычно стоят от 100к до 500к в зависимости от деталей. Где вы видите
+                                себя на этой шкале?"
+                                <i>Итог: Клиент сам выберет комфортную категорию.</i>
+                            </div>
+                            <div class="strat-guide-item">
+                                <b>2. Техника "Автомобильный ряд"</b>
+                                "Мы можем сделать Ford (база), Mercedes (премиум) или Bentley (эксклюзив). Какое 'авто'
+                                нужно вашему бизнесу?"
+                                <i>Итог: Вы узнаете амбиции и готовность платить.</i>
+                            </div>
+                        </div>
+                        <div class="strat-guide-list">
+                            <div class="strat-guide-item">
+                                <b>3. Техника "Обратный вопрос"</b>
+                                "У нас есть решения под разные бюджеты. Если я буду знать ваш лимит, я смогу
+                                спроектировать состав работ под него."
+                                <i>Итог: Перевод фокуса с цены на ценность состава.</i>
+                            </div>
+                            <div class="strat-guide-item">
+                                <b>4. Техника "Якорное число"</b>
+                                "Обычно проекты такого уровня начинаются от 300к. Это вписывается в ваши ожидания?"
+                                <i>Итог: Сразу отсекает нецелевых клиентов.</i>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <aside class="sidebar-content">
+                <div class="sticky-tool-wrap">
+                    <!-- Rounding Tool -->
+                    <div class="glass tool-card">
+                        <div class="section-header text-accent" style="border:none; margin-bottom:1rem">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <h3>УМНОЕ ОКРУГЛЕНИЕ</h3>
+                        </div>
+                        <p class="text-[11px] text-secondary mb-5 leading-relaxed">Никаких «999 ₽». Используем твердые
+                            числа, которые выглядят профессионально и не дешево.</p>
+
+                        <input type="number" id="rawPrice" class="glass-input w-full text-center text-2xl py-4 mb-5"
+                            placeholder="Сумма проекта" oninput="doSmartRound()">
+
+                        <div id="roundingRes"
+                            class="hidden p-6 rounded-2xl bg-accent/10 border border-accent/20 text-center mb-4">
+                            <span id="finalRounded" class="text-3xl font-bold text-white">0 ₽</span>
+                        </div>
+
+                        <div class="round-legend">
+                            <div class="round-item"><span>
+                                    < 5к:</span> <span>шаг 100 ₽</span></div>
+                            <div class="round-item"><span>
+                                    < 20к:</span> <span>шаг 500 ₽</span></div>
+                            <div class="round-item"><span>
+                                    < 200к:</span> <span>шаг 2.5к ₽</span></div>
+                            <div class="round-item"><span>> 200к:</span> <span>шаг 5к+ ₽</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Anchor Tool -->
+                    <div class="glass tool-card">
+                        <div class="section-header" style="border:none; margin-bottom:1rem">
+                            <i class="fa-solid fa-anchor"></i>
+                            <h3>ЯКОРЬ (АНТИ-ТОРГ)</h3>
+                        </div>
+                        <p class="text-[11px] text-secondary mb-6 leading-relaxed">Называйте «Якорь» первым. Это сместит
+                            фокус клиента вверх. Затем делайте «скидку» до «Цели».</p>
+
+                        <input type="number" id="anchorVal" class="glass-input w-full text-center text-2xl py-4 mb-6"
+                            placeholder="Ваша идеальная цена" oninput="doAnchor()">
+
+                        <div class="tier-card anchor">
+                            <div class="tier-label">
+                                <span class="name">Якорь (100%)</span>
+                                <span class="use-case">Озвучиваем первым</span>
+                            </div>
+                            <span class="tier-val" id="resAnchor">0 ₽</span>
+                        </div>
+
+                        <div class="tier-card target">
+                            <div class="tier-label">
+                                <span class="name">Цель (75%)</span>
+                                <span class="use-case">Ваш план на сделку</span>
+                            </div>
+                            <span class="tier-val" id="resTarget">0 ₽</span>
+                        </div>
+
+                        <div class="tier-card base">
+                            <div class="tier-label">
+                                <span class="name">БАЗА (45%)</span>
+                                <span class="use-case">Ниже — отказ</span>
+                            </div>
+                            <span class="tier-val" id="resBase">0 ₽</span>
+                        </div>
+
+                        <p
+                            class="text-[10px] text-secondary mt-5 opacity-40 uppercase text-center font-bold letter-spacing-1">
+                            Якорь — фундамент торга
+                        </p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        const mInputs = document.querySelectorAll('.m-price');
+        mInputs.forEach(i => i.addEventListener('input', () => {
+            let s = 0, c = 0; mInputs.forEach(inp => { if (inp.value) { s += parseFloat(inp.value); c++; } });
+            document.getElementById('avgMarket').textContent = c ? Math.round(s / c).toLocaleString('ru-RU') : 0;
+        }));
+
+        function getJandaStep(v) {
+            if (v < 5000) return 100;
+            if (v < 20000) return 500;
+            if (v < 200000) return 2500;
+            if (v < 1000000) return 5000;
+            return 25000;
+        }
+
+        function doSmartRound() {
+            const p = parseFloat(document.getElementById('rawPrice').value) || 0;
+            const target = document.getElementById('roundingRes');
+            if (p <= 0) { target.classList.add('hidden'); return; }
+            target.classList.remove('hidden');
+            const step = getJandaStep(p);
+            document.getElementById('finalRounded').textContent = (Math.round(p / step) * step).toLocaleString('ru-RU') + ' ₽';
+        }
+
+        function doAnchor() {
+            const a = parseFloat(document.getElementById('anchorVal').value) || 0;
+            document.getElementById('resAnchor').textContent = a.toLocaleString('ru-RU') + ' ₽';
+
+            const targetVal = a * 0.75;
+            const stepT = getJandaStep(targetVal);
+            document.getElementById('resTarget').textContent = (Math.round(targetVal / stepT) * stepT).toLocaleString('ru-RU') + ' ₽';
+
+            const baseVal = a * 0.45;
+            const stepB = getJandaStep(baseVal);
+            document.getElementById('resBase').textContent = (Math.round(baseVal / stepB) * stepB).toLocaleString('ru-RU') + ' ₽';
+        }
+
+        let scenarioID = null;
+        function selectScenario(id, btn) {
+            document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            scenarioID = id;
+            updateRec();
+        }
+
+        function updateRec() {
+            if (!scenarioID) return;
+            const burn = parseFloat(document.getElementById('s-burn').value) || 0;
+            const market = parseFloat(document.getElementById('s-market').value) || 0;
+            const budget = parseFloat(document.getElementById('s-budget').value) || 0;
+            const box = document.getElementById('strategyRec');
+            const priceEl = document.getElementById('recPrice');
+            const textEl = document.getElementById('recText');
+
+            box.classList.add('show'); box.classList.remove('danger');
+            if (burn <= 0) { priceEl.textContent = "0 ₽"; textEl.innerHTML = "Введите издержки, чтобы увидеть анализ."; return; }
+
+            let fp = 0; let t = "";
+            const rnd = (v) => Math.round(v / getJandaStep(v)) * getJandaStep(v);
+
+            if (budget > 0 && burn > budget && scenarioID !== 10) {
+                box.classList.add('danger'); priceEl.textContent = "ОТКАЗ";
+                textEl.innerHTML = "<strong>Риск убытков!</strong> Бюджет ниже издержек. Не перекладывайте деньги из своего кармана в карман клиента.";
+                return;
+            }
+
+            switch (scenarioID) {
+                case 1: fp = rnd(burn * 1.3); if (budget > 0 && fp >= budget) fp = rnd(budget * 0.9);
+                    t = `Цель — выживание. Пропорция маржи снижена для победы.`; break;
+                case 2: fp = budget > 0 ? rnd(budget * 0.98) : rnd(market * 0.95);
+                    t = `Вы заняты. Этот проект стоит вашего времени только за полную цену.`; break;
+
+                case 3: // В завале (Go away price)
+                    let base3 = Math.max(market, budget);
+                    fp = rnd(base3 * 1.3); // +30% к самому дорогому параметру
+                    t = `Либо огромная прибыль за овертайм, либо вы отдыхаете. Цена ${fp.toLocaleString()} ₽ — это психологический барьер 'занятого профи'.`; break;
+
+                case 4: // Сложный клиент (markup on calculated value)
+                    let base4 = market;
+                    if (budget > market) base4 = market + (budget - market) * 0.4;
+                    fp = rnd(base4 * 1.3); // Налог на риск поверх справедливой цены
+                    t = `Наценка 30% за риск бесконечных правок и стресс. Цена ${fp.toLocaleString()} ₽ застрахует ваше время.`; break;
+
+                case 5: fp = market > 0 ? rnd(market) : rnd(burn * 2);
+                    t = `Используйте свою базу эксперта. Не делайте скидок на опыт.`; break;
+                case 6: let opt1 = burn * 1.3; let opt2 = budget > 0 ? budget * 0.85 : market * 0.9; fp = rnd(Math.min(opt1, opt2));
+                    t = `Инвестиция в будущее. Самая низкая из возможных цен для входа.`; break;
+                case 7: fp = rnd(budget > 0 ? budget * 0.9 : burn * 1.25);
+                    t = `Психология тендера: будьте на 10% выгоднее бюджета клиента.`; break;
+                case 8: box.classList.add('danger'); fp = 0;
+                    t = `Бюджет ниже рыночных стандартов. Сокращайте состав работ.`; break;
+                case 9: fp = market > 0 && budget > market ? rnd(market + (budget - market) * 0.5) : rnd(budget * 0.85);
+                    t = `Разделяем 'лишний' бюджет клиента поровну между вами и ним.`; break;
+                case 10: fp = rnd(burn);
+                    t = `Работа по себестоимости. Исправляем косяки или спасаем дружбу.`; break;
+                case 11: box.classList.add('danger'); fp = 0;
+                    t = `Ваши затраты выше рынка. Оптимизируйте бизнес-модель.`; break;
+                case 12: fp = rnd(Math.max(market, burn) * 3);
+                    t = `Вы — бренд. Сумма в 3 раза выше рынка оправдана вашим именем.`; break;
+            }
+            priceEl.textContent = fp > 0 ? fp.toLocaleString('ru-RU') + ' ₽' : "ОТКАЗ";
+            textEl.innerHTML = t;
+        }
+    </script>
+    <footer class="app-footer">
+        <div class="footer-content">
+            <p>Создано для продуктивности и честного бизнеса</p>
+            <div class="footer-links">
+                <a href="https://square.tprod.space/" target="_blank" class="footer-link">
+                    <i class="fa-solid fa-users"></i> Сообщество фриланса
+                </a>
+                <a href="https://github.com/ezhkov-ph/freelance-business-logic" target="_blank" class="footer-link">
+                    <i class="fa-brands fa-github"></i> GitHub Репозиторий
+                </a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

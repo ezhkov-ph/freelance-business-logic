@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cost of Time | Калькулятор себестоимости</title>
+    <link rel="stylesheet" href="global.css">
+    <link rel="stylesheet" href="hour_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="app-container">
+        <header>
+            <nav class="nav-tabs">
+                <a href="index.html" class="nav-btn">0. Бартер</a>
+                <a href="hour_calc.html" class="nav-btn active">1. Расходы</a>
+                <a href="project_calc.html" class="nav-btn">2. Почасовка</a>
+                <a href="negotiation_new.html" class="nav-btn">3. Стратегия</a>
+            </nav>
+            <div class="logo">
+                <i class="fa-solid fa-hourglass-half"></i>
+                <span>Стоимость вашего времени</span>
+            </div>
+            <h1>Себестоимость (Месяц)</h1>
+            <p>Узнайте свою месячную «скорость сгорания денег» (Burn Rate), чтобы никогда не работать в минус.</p>
+        </header>
+
+        <main>
+            <div class="setup-grid">
+                <!-- Левая колонка: Ввод данных -->
+                <section class="input-panel glass">
+                    <div class="section-header">
+                        <i class="fa-solid fa-clock"></i>
+                        <h3>Рабочее время (в месяц)</h3>
+                    </div>
+
+                    <div class="input-card">
+                        <label for="billableHours">
+                            <i class="fa-solid fa-briefcase"></i> Работа над проектами
+                            <span class="help-icon"
+                                title="Часы, за которые клиент платит напрямую. Ваше «производство».">?</span>
+                        </label>
+                        <div class="range-container">
+                            <input type="range" id="billableHours" min="5" max="200" value="80" step="1">
+                            <span id="billableValue" class="val-badge">80 ч</span>
+                        </div>
+                        <small class="hint">Только чистое время на задачи клиента.</small>
+                    </div>
+
+                    <div class="input-card">
+                        <label for="adminHours">
+                            <i class="fa-solid fa-gears"></i> Внутреннее время (Оверхед)
+                            <span class="help-icon"
+                                title="Переговоры, самопиар, дорога, обучение, ведение бухгалтерии и поиск заказов.">?</span>
+                        </label>
+                        <div class="range-container">
+                            <input type="range" id="adminHours" min="0" max="150" value="40" step="1">
+                            <span id="adminValue" class="val-badge">40 ч</span>
+                        </div>
+                        <small class="hint">Это время косвенно оплачивается клиентом.</small>
+                    </div>
+
+                    <div class="capacity-meter">
+                        <div class="meter-label">
+                            <span>Нагрузка (из расчета 160ч/мес):</span>
+                            <span id="totalCapacityLabel">120 ч</span>
+                        </div>
+                        <div class="meter-bar">
+                            <div id="capacityFill" class="meter-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="section-header">
+                        <i class="fa-solid fa-wallet"></i>
+                        <h3>Ежемесячные расходы</h3>
+                    </div>
+
+                    <div class="expenses-list" id="expensesList">
+                        <!-- Базовые категории -->
+                        <div class="exp-item" data-fixed="true">
+                            <div class="exp-info">
+                                <i class="fa-solid fa-house"></i>
+                                <span>Жилье / Офис</span>
+                            </div>
+                            <input type="number" class="exp-input" data-cat="housing" value="40000" placeholder="0">
+                        </div>
+
+                        <div class="exp-item" data-fixed="true">
+                            <div class="exp-info">
+                                <i class="fa-solid fa-utensils"></i>
+                                <span>Еда и быт</span>
+                            </div>
+                            <input type="number" class="exp-input" data-cat="living" value="30000" placeholder="0">
+                        </div>
+
+                        <div class="exp-item" data-fixed="true">
+                            <div class="exp-info">
+                                <i class="fa-solid fa-percent"></i>
+                                <span>Налог с дохода (%)</span>
+                            </div>
+                            <input type="number" id="taxPercent" class="exp-input" value="6" min="0" max="40">
+                        </div>
+
+                        <div class="exp-item" data-fixed="true">
+                            <div class="exp-info">
+                                <i class="fa-solid fa-shield-halved"></i>
+                                <span>Фикс. налоги / Сборы</span>
+                            </div>
+                            <input type="number" class="exp-input" data-cat="taxes" value="0" placeholder="0">
+                        </div>
+
+                        <div class="exp-item" data-fixed="true">
+                            <div class="exp-info">
+                                <i class="fa-solid fa-umbrella-beach"></i>
+                                <span>Фонд отпуска</span>
+                            </div>
+                            <input type="number" class="exp-input" data-cat="vacation" value="10000" placeholder="0">
+                        </div>
+
+                        <div class="exp-item" data-fixed="true">
+                            <div class="exp-info">
+                                <i class="fa-solid fa-heart-pulse"></i>
+                                <span>Здоровье / Спорт</span>
+                            </div>
+                            <input type="number" class="exp-input" data-cat="health" value="5000" placeholder="0">
+                        </div>
+
+                        <div class="exp-item" data-fixed="true">
+                            <div class="exp-info">
+                                <i class="fa-solid fa-laptop-code"></i>
+                                <span>Подписки / Софт</span>
+                            </div>
+                            <input type="number" class="exp-input" data-cat="subs" value="3000" placeholder="0">
+                        </div>
+                    </div>
+
+                    <button id="addExpense" class="btn-add">
+                        <i class="fa-solid fa-plus"></i> Добавить свой расход
+                    </button>
+                </section>
+
+                <!-- Правая колонка: Результат -->
+                <section class="result-panel">
+                    <div class="main-result glass">
+                        <p class="res-label">Рекомендуемая стоимость часа</p>
+                        <div class="price-display">
+                            <span id="profitPrice">0</span>
+                            <span class="currency">₽/час</span>
+                        </div>
+                        <div class="status-badge" id="statusBadge" style="background: var(--success); color: white;">
+                            Целевая цена (с прибылью)</div>
+                    </div>
+
+                    <div class="breakdown-card glass">
+                        <h4>Расшифровка месяца:</h4>
+                        <div class="stat-row">
+                            <span>Личные расходы:</span>
+                            <span id="totalExpenses">0 ₽</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Стоимость оверхеда:</span>
+                            <span id="totalOverhead">0 ₽</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>
+                                Прибыль и рост (%)
+                                <span class="help-icon"
+                                    title="Запас на развитие бизнеса, покупку новой техники, обучение и подушку безопасности. Без этого процента вы работаете «в ноль».">?</span>
+                            </span>
+                            <input type="number" id="growthPercent" class="exp-input" value="20" min="0" max="100">
+                        </div>
+                        <div class="stat-row">
+                            <span>Запас на развитие (сумма):</span>
+                            <span id="growthReserve">0 ₽</span>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="stat-row highlight">
+                            <span>Точка безубыточности:</span>
+                            <span id="hourlyRate">0 ₽/ч</span>
+                        </div>
+                    </div>
+
+                    <div class="advice-card glass">
+                        <div class="advice-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                        <div class="advice-content">
+                            <h5>Совет стратега:</h5>
+                            <p id="strategyAdvice">Заполните данные, чтобы получить персональную рекомендацию по росту
+                                чека.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <section class="principles-section">
+                <h2 class="section-title">Золотые правила ценообразования</h2>
+                <div class="principles-grid">
+                    <div class="principle-card glass">
+                        <div class="p-num">01</div>
+                        <h4>Говорите о деньгах уверенно</h4>
+                        <p>Тщательно считайте статистику и называйте цену твердым голосом. Если вы сомневаетесь, клиент
+                            перестает вам доверять.</p>
+                    </div>
+                    <div class="principle-card glass">
+                        <div class="p-num">02</div>
+                        <h4>Прибыль — это не грех</h4>
+                        <p>Вы занимаетесь бизнесом. Не каждый проект принесет удовольствие, но каждый обязан быть
+                            прибыльным.</p>
+                    </div>
+                    <div class="principle-card glass">
+                        <div class="p-num">03</div>
+                        <h4>Никаких убыточных проектов</h4>
+                        <p>Цена проекта никогда не должна быть ниже затрат на его производство. Цифры этого калькулятора
+                            — ваш закон.</p>
+                    </div>
+                    <div class="principle-card glass">
+                        <div class="p-num">04</div>
+                        <h4>Округляйте всегда вверх</h4>
+                        <p>Никогда не используйте «рыночные» 999 ₽. Округляйте ставку до ближайших 50, 100 или 500 ₽ в
+                            большую сторону. Погрешность всегда должна быть в вашу пользу.</p>
+                    </div>
+                    <div class="principle-card glass">
+                        <div class="p-num">05</div>
+                        <h4>Фиксированная цена лучше</h4>
+                        <p>Если проект можно оценить целиком — делайте это. Почасовая оплата вознаграждает
+                            медлительность, а фикс — вашу скорость.</p>
+                    </div>
+                    <div class="principle-card glass">
+                        <div class="p-num">06</div>
+                        <h4>Этапы, а не услуги</h4>
+                        <p>Разбивайте смету по стадиям работы. Так у клиента меньше шансов вычеркнуть «услугу», чтобы
+                            необоснованно сократить бюджет.</p>
+                    </div>
+                    <div class="principle-card glass">
+                        <div class="p-num">07</div>
+                        <h4>Ваша прибыль — ваш секрет</h4>
+                        <p>Клиенту не нужно знать вашу маржу. Размер вашей прибыли не имеет значения для конечного
+                            качества продукта.</p>
+                    </div>
+                    <div class="principle-card glass">
+                        <div class="p-num">08</div>
+                        <h4>Не считайте часы вслух</h4>
+                        <p>Если вы договорились о фиксе, количество часов перестает волновать клиента. Следите за
+                            временем только для себя.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="manifesto-section glass">
+                <div class="manifesto-content">
+                    <i class="fa-solid fa-rocket manifesto-icon"></i>
+                    <div class="manifesto-text">
+                        <h3>Это ваш фундамент, а не потолок</h3>
+                        <p>
+                            Калькулятор находит вашу <strong>нижнюю границу</strong>. Если вы можете продать свой час в
+                            5 раз дороже — делайте это, это признак высокого мастерства и востребованности!
+                        </p>
+                        <p>
+                            Но никогда не опускайтесь ниже рассчитанного минимума. Это не просто цифры — это ваше
+                            здоровье, время и будущее.
+                        </p>
+                        <p class="highlight-text">
+                            Забудьте про «рыночные цены». Рынок не знает ваших расходов на жилье, налоги и оверхед.
+                            Настоящая правда о цене находится только в ваших руках — это ваш бизнес, и только вы знаете
+                            его истинную стоимость.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Модалка для добавления расхода -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-content glass">
+            <h3>Новый расход</h3>
+            <input type="text" id="newExpName" placeholder="Название (например: Кредит)">
+            <input type="number" id="newExpValue" placeholder="Сумма в месяц (₽)">
+            <div class="modal-btns">
+                <button id="cancelBtn" class="btn-text">Отмена</button>
+                <button id="confirmBtn" class="btn-primary">Добавить</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <p>Создано для продуктивности и честного бизнеса</p>
+            <div class="footer-links">
+                <a href="https://square.tprod.space/" target="_blank" class="footer-link">
+                    <i class="fa-solid fa-users"></i> Сообщество фриланса
+                </a>
+                <a href="https://github.com/ezhkov-ph/freelance-business-logic" target="_blank" class="footer-link">
+                    <i class="fa-brands fa-github"></i> GitHub Репозиторий
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="hour_script.js"></script>
+</body>
+
+</html>
