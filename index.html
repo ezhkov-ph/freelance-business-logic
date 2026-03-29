@@ -14,10 +14,14 @@
     <!-- Yandex.Metrica placeholder -->
     <div id="yandex-metrica-container"></div>
     <script>
-        fetch('analytics.html')
-            .then(r => r.ok ? r.text() : Promise.reject())
-            .then(html => document.getElementById('yandex-metrica-container').innerHTML = html)
-            .catch(() => console.log('Analytics not loaded (local)'));
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'analytics.html', true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                document.getElementById('yandex-metrica-container').innerHTML = xhr.responseText;
+            }
+        };
+        xhr.send();
     </script>
 </head>
 
