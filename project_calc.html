@@ -16,7 +16,20 @@
         xhr.open('GET', 'analytics.html', true);
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                document.getElementById('yandex-metrica-container').innerHTML = xhr.responseText;
+                var container = document.getElementById('yandex-metrica-container');
+                container.innerHTML = xhr.responseText;
+                
+                // Выполняем скрипты вручную
+                var scripts = container.getElementsByTagName('script');
+                for (var i = 0; i < scripts.length; i++) {
+                    var script = document.createElement('script');
+                    if (scripts[i].src) {
+                        script.src = scripts[i].src;
+                    } else {
+                        script.text = scripts[i].text;
+                    }
+                    document.head.appendChild(script);
+                }
             }
         };
         xhr.send();
