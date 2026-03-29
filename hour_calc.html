@@ -4,10 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cost of Time | Калькулятор себестоимости</title>
+    <title>Калькулятор себестоимости</title>
     <link rel="stylesheet" href="global.css">
     <link rel="stylesheet" href="hour_style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Yandex.Metrica placeholder -->
+    <div id="yandex-metrica-container"></div>
+    <script>
+        fetch('analytics.html')
+            .then(r => r.ok ? r.text() : Promise.reject())
+            .then(html => document.getElementById('yandex-metrica-container').innerHTML = html)
+            .catch(() => console.log('Analytics not loaded (local)'));
+    </script>
 </head>
 
 <body>
@@ -24,9 +33,9 @@
                 <a href="hour_calc.html" class="nav-btn active">1. Расходы</a>
                 <a href="project_calc.html" class="nav-btn">2. Почасовка</a>
                 <a href="negotiation_new.html" class="nav-btn">3. Стратегия</a>
+                <a href="amortization_calc.html" class="nav-btn">4. Амортизация</a>
             </nav>
             <div class="logo">
-                <i class="fa-solid fa-hourglass-half"></i>
                 <span>Стоимость вашего времени</span>
             </div>
             <h1>Себестоимость (Месяц)</h1>

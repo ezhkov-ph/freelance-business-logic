@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Амортизация оборудования</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="global.css">
+    <link rel="stylesheet" href="amortization_style.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Yandex.Metrica placeholder -->
+    <div id="yandex-metrica-container"></div>
+    <script>
+        fetch('analytics.html')
+            .then(r => r.ok ? r.text() : Promise.reject())
+            .then(html => document.getElementById('yandex-metrica-container').innerHTML = html)
+            .catch(() => console.log('Analytics not loaded (local)'));
+    </script>
+</head>
+
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <nav class="nav-tabs">
+                <a href="index.html" class="nav-btn">0. Бартер</a>
+                <a href="hour_calc.html" class="nav-btn">1. Расходы</a>
+                <a href="project_calc.html" class="nav-btn">2. Почасовка</a>
+                <a href="negotiation_new.html" class="nav-btn">3. Стратегия</a>
+                <a href="amortization_calc.html" class="nav-btn active">4. Амортизация</a>
+            </nav>
+            <div class="logo">
+                <span>Калькулятор амортизации</span>
+            </div>
+            <h1>Расчет амортизации оборудования</h1>
+            <p>Для фотографов, видеографов, диджеев, световиков и других специалистов креативных индустрий</p>
+        </header>
+
+        <main class="glass-panel">
+            <!-- Выбор оборудования -->
+            <section class="equipment-section">
+                <div class="section-header">
+                    <i class="fa-solid fa-camera"></i>
+                    <h3>Выберите тип оборудования</h3>
+                </div>
+
+                <div class="equipment-grid">
+                    <div class="equipment-card" data-type="photo">
+                        <div class="equip-icon"><i class="fa-solid fa-camera"></i></div>
+                        <h4>Фотооборудование</h4>
+                        <p>Камеры, объективы, вспышки, студийный свет</p>
+                    </div>
+                    <div class="equipment-card" data-type="video">
+                        <div class="equip-icon"><i class="fa-solid fa-video"></i></div>
+                        <h4>Видеооборудование</h4>
+                        <p>Камеры, стабилизаторы, микрофоны, свет</p>
+                    </div>
+                    <div class="equipment-card" data-type="dj">
+                        <div class="equip-icon"><i class="fa-solid fa-music"></i></div>
+                        <h4>DJ оборудование</h4>
+                        <p>Контроллеры, микшеры, колонки, наушники</p>
+                    </div>
+                    <div class="equipment-card" data-type="light">
+                        <div class="equip-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                        <h4>Световое оборудование</h4>
+                        <p>Прожекторы, LED-панели, контроллеры</p>
+                    </div>
+                    <div class="equipment-card" data-type="audio">
+                        <div class="equip-icon"><i class="fa-solid fa-microphone"></i></div>
+                        <h4>Звуковое оборудование</h4>
+                        <p>Микрофоны, микшеры, интерфейсы, мониторы</p>
+                    </div>
+                    <div class="equipment-card" data-type="computer">
+                        <div class="equip-icon"><i class="fa-solid fa-laptop"></i></div>
+                        <h4>Компьютеры и техника</h4>
+                        <p>Ноутбуки, ПК, мониторы, планшеты</p>
+                    </div>
+                    <div class="equipment-card" data-type="custom">
+                        <div class="equip-icon"><i class="fa-solid fa-sliders"></i></div>
+                        <h4>Другое</h4>
+                        <p>Свое название и параметры</p>
+                    </div>
+                </div>
+
+                <div id="customEquipmentBlock" class="hidden">
+                    <div class="input-group">
+                        <label for="customEquipName">Название оборудования</label>
+                        <input type="text" id="customEquipName" placeholder="Например: Гримерка, костюмы, реквизит...">
+                    </div>
+                </div>
+            </section>
+
+            <div class="divider"></div>
+
+            <!-- Параметры оборудования -->
+            <section class="params-section">
+                <div class="section-header">
+                    <i class="fa-solid fa-sliders"></i>
+                    <h3>Параметры оборудования</h3>
+                </div>
+
+                <div class="params-grid">
+                    <div class="input-group">
+                        <label for="equipName">
+                            <i class="fa-solid fa-tag"></i> Название
+                            <span class="help-icon" title="Как вы называете это оборудование для себя">?</span>
+                        </label>
+                        <input type="text" id="equipName" placeholder="Например: Sony A7 IV">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="initialCost">
+                            <i class="fa-solid fa-ruble-sign"></i> Первоначальная стоимость (₽)
+                            <span class="help-icon" title="Сумма, которую вы заплатили при покупке оборудования">?</span>
+                        </label>
+                        <input type="number" id="initialCost" placeholder="Например: 250000">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="usefulLife">
+                            <i class="fa-solid fa-calendar"></i> Срок полезного использования (лет)
+                            <span class="help-icon" title="Сколько лет вы планируете использовать это оборудование">?</span>
+                        </label>
+                        <input type="number" id="usefulLife" placeholder="Например: 5">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="liquidationValue">
+                            <i class="fa-solid fa-coins"></i> Ликвидационная стоимость (₽)
+                            <span class="help-icon" title="Остаточная стоимость после окончания срока службы (можно продать на запчасти)">?</span>
+                        </label>
+                        <input type="number" id="liquidationValue" value="0" placeholder="Например: 25000">
+                    </div>
+                </div>
+            </section>
+
+            <div class="divider"></div>
+
+            <!-- Выбор метода амортизации -->
+            <section class="methods-section">
+                <div class="section-header">
+                    <i class="fa-solid fa-list-check"></i>
+                    <h3>Методы расчета амортизации</h3>
+                </div>
+
+                <div class="methods-grid">
+                    <div class="method-card" data-method="linear">
+                        <div class="method-icon"><i class="fa-solid fa-ruler-horizontal"></i></div>
+                        <h4>Линейный метод</h4>
+                        <p>Равномерное списание равными долями</p>
+                        <div class="method-tag">📊 Равномерный</div>
+                    </div>
+
+                    <div class="method-card" data-method="declining">
+                        <div class="method-icon"><i class="fa-solid fa-chart-line"></i></div>
+                        <h4>Метод уменьшаемого остатка</h4>
+                        <p>Ускоренная амортизация, наибольшие суммы в первые годы</p>
+                        <div class="method-tag warning">⚡ Ускоренный</div>
+                    </div>
+
+                    <div class="method-card" data-method="annuity">
+                        <div class="method-icon"><i class="fa-solid fa-percent"></i></div>
+                        <h4>Аннуитетный метод</h4>
+                        <p>Маленькая амортизация в начале, большая в конце</p>
+                        <div class="method-tag info">📈 Сложные проценты</div>
+                    </div>
+
+                    <div class="method-card" data-method="units">
+                        <div class="method-icon"><i class="fa-solid fa-boxes-packing"></i></div>
+                        <h4>Метод единиц производства</h4>
+                        <p>Списание в зависимости от фактической эксплуатации</p>
+                        <div class="method-tag success">🎯 По факту</div>
+                    </div>
+
+                    <div class="method-card" data-method="group">
+                        <div class="method-icon"><i class="fa-solid fa-layer-group"></i></div>
+                        <h4>Нелинейный (групповой) метод</h4>
+                        <p>Амортизация на группу активов</p>
+                        <div class="method-tag">👥 Групповой</div>
+                    </div>
+
+                    <div class="method-card" data-method="sumyears">
+                        <div class="method-icon"><i class="fa-solid fa-calculator"></i></div>
+                        <h4>Метод суммы чисел лет</h4>
+                        <p>Ускоренная амортизация через дробь лет</p>
+                        <div class="method-tag warning">⚡ Ускоренный</div>
+                    </div>
+
+                    <div class="method-card" data-method="immediate">
+                        <div class="method-icon"><i class="fa-solid fa-bolt"></i></div>
+                        <h4>Единовременное списание</h4>
+                        <p>100% стоимости в момент ввода в эксплуатацию</p>
+                        <div class="method-tag danger">💥 Мгновенный</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Дополнительные параметры для метода единиц производства -->
+            <div id="productionParams" class="hidden glass" style="margin-top: 1.5rem; padding: 1.5rem; border-radius: 16px; border: 1px solid rgba(139, 92, 246, 0.2);">
+                <div class="section-header">
+                    <i class="fa-solid fa-industry"></i>
+                    <h3>Параметры производства</h3>
+                </div>
+                <div class="params-grid">
+                    <div class="input-group">
+                        <label for="totalProduction">
+                            <i class="fa-solid fa-layer-group"></i> Общий объем производства (ед.)
+                            <span class="help-icon" title="Планируемое количество единиц за весь срок службы (съемок, часов, км)">?</span>
+                        </label>
+                        <input type="number" id="totalProduction" placeholder="Например: 500 съемок">
+                    </div>
+                    <div class="input-group">
+                        <label for="currentProduction">
+                            <i class="fa-solid fa-gauge"></i> Фактический объем за период (ед.)
+                            <span class="help-icon" title="Сколько единиц уже произведено за расчетный период">?</span>
+                        </label>
+                        <input type="number" id="currentProduction" placeholder="Например: 45 съемок">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Параметры для группового метода -->
+            <div id="groupParams" class="hidden glass" style="margin-top: 1.5rem; padding: 1.5rem; border-radius: 16px; border: 1px solid rgba(245, 158, 11, 0.2);">
+                <div class="section-header">
+                    <i class="fa-solid fa-objects-column"></i>
+                    <h3>Параметры группы активов</h3>
+                </div>
+                <div class="params-grid">
+                    <div class="input-group">
+                        <label for="groupBalance">
+                            <i class="fa-solid fa-piggy-bank"></i> Суммарный баланс группы (₽)
+                            <span class="help-icon" title="Общая стоимость всех активов в группе">?</span>
+                        </label>
+                        <input type="number" id="groupBalance" placeholder="Например: 1500000">
+                    </div>
+                    <div class="input-group">
+                        <label for="groupRate">
+                            <i class="fa-solid fa-percent"></i> Норма амортизации группы (%)
+                            <span class="help-icon" title="Процент амортизации для данной группы активов">?</span>
+                        </label>
+                        <input type="number" id="groupRate" placeholder="Например: 20">
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Настройки расчета -->
+            <section class="calc-settings">
+                <div class="section-header">
+                    <i class="fa-solid fa-gears"></i>
+                    <h3>Настройки расчета</h3>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="input-group">
+                        <label for="calcPeriod">
+                            <i class="fa-solid fa-calendar-check"></i> Период расчета
+                            <span class="help-icon" title="За какой период рассчитать амортизацию">?</span>
+                        </label>
+                        <select id="calcPeriod">
+                            <option value="month">Месяц</option>
+                            <option value="quarter">Квартал</option>
+                            <option value="year" selected>Год</option>
+                            <option value="full">Весь срок службы</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="accelerationFactor">
+                            <i class="fa-solid fa-rocket"></i> Коэффициент ускорения
+                            <span class="help-icon" title="Коэффициент для методов ускоренной амортизации (обычно 2 для двойного уменьшения)">?</span>
+                        </label>
+                        <input type="number" id="accelerationFactor" value="2" min="1" max="3" step="0.5">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="interestRate">
+                            <i class="fa-solid fa-bank"></i> Процентная ставка (%)
+                            <span class="help-icon" title="Ставка для аннуитетного метода сложных процентов">?</span>
+                        </label>
+                        <input type="number" id="interestRate" value="10" min="0" max="30" step="0.5">
+                    </div>
+                </div>
+            </section>
+
+            <button type="button" class="btn-calculate" id="calcBtn">
+                <span class="btn-text"><i class="fa-solid fa-calculator"></i> Рассчитать амортизацию</span>
+            </button>
+        </main>
+
+        <!-- Результаты расчета -->
+        <div id="results-panel" class="hidden">
+            <div class="results-header">
+                <h2><i class="fa-solid fa-circle-check"></i> Результаты расчета</h2>
+                <p id="resultSubtitle">Амортизация оборудования по выбранному методу</p>
+            </div>
+
+            <div class="summary-cards">
+                <div class="summary-card primary">
+                    <div class="summary-icon"><i class="fa-solid fa-ruble-sign"></i></div>
+                    <div class="summary-content">
+                        <span class="summary-label">
+                            Сумма амортизации за период
+                            <span class="help-icon" title="Сколько стоимости оборудования списывается в этом году. Это сумма, которую можно учесть в расходах для уменьшения налога.">?</span>
+                        </span>
+                        <span class="summary-value" id="resAmortizationAmount">0 ₽</span>
+                        <span class="summary-hint">Списание в расходы за год</span>
+                    </div>
+                </div>
+
+                <div class="summary-card secondary">
+                    <div class="summary-icon"><i class="fa-solid fa-wallet"></i></div>
+                    <div class="summary-content">
+                        <span class="summary-label">
+                            Остаточная стоимость
+                            <span class="help-icon" title="Сколько ещё не списано. Если продать оборудование сейчас, эта сумма будет считаться доходом при налогообложении.">?</span>
+                        </span>
+                        <span class="summary-value" id="resRemainingValue">0 ₽</span>
+                        <span class="summary-hint">Не списано на конец года</span>
+                    </div>
+                </div>
+
+                <div class="summary-card tertiary">
+                    <div class="summary-icon"><i class="fa-solid fa-chart-pie"></i></div>
+                    <div class="summary-content">
+                        <span class="summary-label">
+                            Накопленная амортизация
+                            <span class="help-icon" title="Общая сумма, которая уже списана с момента покупки. Показывает, сколько стоимости оборудования вы уже «вернули» через расходы.">?</span>
+                        </span>
+                        <span class="summary-value" id="resAccumulatedAmort">0 ₽</span>
+                        <span class="summary-hint">Всего списано с начала</span>
+                    </div>
+                </div>
+
+                <div class="summary-card quaternary">
+                    <div class="summary-icon"><i class="fa-solid fa-percent"></i></div>
+                    <div class="summary-content">
+                        <span class="summary-label">
+                            Годовая норма амортизации
+                            <span class="help-icon" title="Какой процент от стоимости списывается за год. Например, 20% means что оборудование теряет пятую часть стоимости за год.">?</span>
+                        </span>
+                        <span class="summary-value" id="resDepreciationRate">0%</span>
+                        <span class="summary-hint">Скорость списания</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Таблица по годам -->
+            <div class="schedule-section">
+                <h3><i class="fa-solid fa-table"></i> График амортизации по годам</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">
+                    <i class="fa-solid fa-circle-info"></i> 
+                    Показывает, как распределяется стоимость оборудования по годам. 
+                    <strong>Амортизация за год</strong> — сколько списывается в этом году, 
+                    <strong>Накопленная амортизация</strong> — сколько всего списано с момента покупки, 
+                    <strong>Остаточная стоимость</strong> — сколько ещё не списано.
+                </p>
+                <div class="table-wrapper">
+                    <table class="amortization-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Год
+                                    <span class="help-icon" title="Номер года с момента покупки оборудования">?</span>
+                                </th>
+                                <th>
+                                    Амортизация за год
+                                    <span class="help-icon" title="Сумма, которая списывается в расходах в этом году">?</span>
+                                </th>
+                                <th>
+                                    Накопленная амортизация
+                                    <span class="help-icon" title="Общая сумма всех списаний с начала эксплуатации">?</span>
+                                </th>
+                                <th>
+                                    Остаточная стоимость
+                                    <span class="help-icon" title="Сколько стоимости ещё не списано. Эта сумма остаётся на балансе.">?</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="scheduleTableBody">
+                            <!-- Заполняется через JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Пояснения по методу -->
+            <div class="method-explanation glass">
+                <div class="explanation-icon"><i class="fa-solid fa-circle-info"></i></div>
+                <div class="explanation-content">
+                    <h4>О выбранном методе</h4>
+                    <p id="methodDescription">Описание метода будет здесь</p>
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h5><i class="fa-solid fa-thumbs-up"></i> Преимущества</h5>
+                            <ul id="methodPros"></ul>
+                        </div>
+                        <div class="cons">
+                            <h5><i class="fa-solid fa-thumbs-down"></i> Недостатки</h5>
+                            <ul id="methodCons"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Рекомендации для креативных индустрий -->
+            <div class="recommendations glass">
+                <div class="explanation-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                <div class="explanation-content">
+                    <h4>Рекомендации для вашей сферы</h4>
+                    <p id="industryAdvice">Советы по выбору метода амортизации для вашего типа оборудования</p>
+                </div>
+            </div>
+
+            <!-- Пример расшифровки -->
+            <div class="example-box glass" style="border: 1px solid rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.05);">
+                <div class="explanation-icon" style="color: var(--accent);"><i class="fa-solid fa-book-open"></i></div>
+                <div class="explanation-content">
+                    <h4 style="color: var(--accent);">Как это использовать на практике?</h4>
+                    <p style="margin-bottom: 1rem;">
+                        <strong>Для фотографа/видеографа:</strong> Если вы купили камеру за 33 333 ₽ и используете метод уменьшаемого остатка, 
+                        то в первый год вы можете списать в расходы 13 333 ₽. Это уменьшит ваш налогооблагаемый доход.
+                    </p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8;">
+                        <li>💰 <strong>Налог (УСН 6%):</strong> Сэкономите 13 333 × 6% = <strong>800 ₽</strong> налогов в год</li>
+                        <li>📊 <strong>Для самозанятых:</strong> Амортизация помогает понять реальную стоимость съёмки и заложить замену техники в цену</li>
+                        <li>🔄 <strong>Через 5 лет:</strong> Оборудование будет иметь остаточную стоимость 2 592 ₽ — значит, пора копить на новое</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="btn-secondary" id="btnReset">
+                <i class="fa-solid fa-rotate-left"></i> Рассчитать заново
+            </button>
+        </div>
+    </div>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <p>Создано для продуктивности и честного бизнеса</p>
+            <div class="footer-links">
+                <a href="https://square.tprod.space/" target="_blank" class="footer-link">
+                    <i class="fa-solid fa-users"></i> Сообщество фриланса
+                </a>
+                <a href="https://github.com/ezhkov-ph/freelance-business-logic" target="_blank" class="footer-link">
+                    <i class="fa-brands fa-github"></i> GitHub Репозиторий
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="amortization_script.js"></script>
+</body>
+
+</html>
